@@ -73,11 +73,11 @@ export class PizzaDetailComponent {
     }
 
     save() {
-        this.pizzaService.save(this.pizza).then((pizza) => this.pizza = pizza);
+        this.pizzaService.save(this.pizza).then((pizza) => Object.assign(this.pizza, pizza));
         this.pizza.touched = false;
     }
 
     advanceStatus() {
-        this.pizzaService.advanceStatus(this.pizza).then((pizza) => this.pizza = pizza);
+        this.pizzaService.advanceStatus(this.pizza).then((pizza) => Object.assign(this.pizza, pizza));
     }
 }
