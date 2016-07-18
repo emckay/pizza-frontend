@@ -14,10 +14,11 @@ import { Topping } from '../models/topping.ts';
         <div>
             <b>Status</b>
             {{pizza.pizza_status.name}}
+            <span *ngIf="touched">(Unsaved changes)</span>
         </div>
         <div>
             <label><b>Name</b></label>
-            <input [(ngModel)]="pizza.name" value="{{pizza.name}}" placeholder="name">
+            <input [(ngModel)]="pizza.name" value="{{pizza.name}}" (keyup)="touched = true" placeholder="name">
         </div>
         <div class="topping-options">
             <div *ngFor="let topping of toppings">
@@ -33,7 +34,7 @@ import { Topping } from '../models/topping.ts';
         </div>
         <div>
             <a class="btn btn-default" (click)="save()">Save</a>
-            <a *ngIf="pizza.pizza_status.order === 0" class="btn btn-primary" (click)="advanceStatus()">Submit Order</a>
+            <a *ngIf="pizza.pizza_status.order === 0 && !touched" class="btn btn-primary" (click)="advanceStatus()">Submit Order</a>
         </div>
     </div>
   `,
@@ -47,11 +48,14 @@ export class PizzaDetailComponent {
     @Input()
     toppings: Array<Topping>;
 
+    touched: boolean = false;
+
     toppingIncluded(topping: Topping) {
         return this.pizza.toppings.map((t) => t.id).indexOf(topping.id) >= 0;
     }
 
     toggleTopping(topping: Topping) {
+        this.touched = true;
         if (this.toppingIncluded(topping)) {
             this.pizza.toppings = this.pizza.toppings.filter((t) => t.id !== topping.id);
         } else {
@@ -61,6 +65,7 @@ export class PizzaDetailComponent {
 
     save() {
         this.pizzaService.save(this.pizza).then((pizza) => this.pizza = pizza);
+        this.touched = false;
     }
 
     advanceStatus() {
