@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {NGB_DIRECTIVES, NGB_PRECOMPILE} from '@ng-bootstrap/ng-bootstrap';
 
 import { Pizza } from '../models/pizza.ts';
+import { Topping } from '../models/topping.ts';
 import { PizzaService } from '../services/pizza.service.ts';
 import { ToppingService } from '../services/topping.service.ts';
 
@@ -10,7 +11,7 @@ import { PizzaDetailComponent } from './pizza-detail.component.ts';
 @Component({
     directives: [ NGB_DIRECTIVES, PizzaDetailComponent ],
     precompile: [ NGB_PRECOMPILE ],
-    providers: [ PizzaService, ToppingService ]
+    providers: [ PizzaService, ToppingService ],
     selector: 'app',
     template: `
         <div class="container">
@@ -36,6 +37,8 @@ export class AppComponent implements OnInit {
     constructor(private pizzaService: PizzaService, private toppingService: ToppingService) { }
 
     selectedPizza: Pizza;
+    toppings: Array<Topping>;
+    pizzas: Array<Pizza>;
 
     onSelect(pizza: Pizza) { this.selectedPizza = pizza; }
 
