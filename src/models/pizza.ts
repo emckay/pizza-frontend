@@ -5,6 +5,7 @@ export class Pizza {
     name: string;
     pizza_status: Object;
     toppings: Array<Topping>;
+    touched: boolean;
 
     constructor({ name = "New Pizza", pizza_status = { name: "Unsaved", order: -1 }, toppings = [], id }:
                 { name?: string, pizza_status?: Object, toppings?: Array<Topping>, id?: number })

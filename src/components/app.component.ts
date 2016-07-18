@@ -14,9 +14,10 @@ import { PizzaDetailComponent } from './pizza-detail.component.ts';
     providers: [ PizzaService, ToppingService ],
     selector: 'app',
     template: `
-        <div class="container">
+        <div class="app container" *ngIf="!loading">
             <div class="row">
                 <div class="col-xs-3">
+                    <h2>Pizzas</h2>
                     <ul class="pizza-list list-group">
                         <li *ngFor="let pizza of pizzas"
                             class="list-group-item"
@@ -26,7 +27,7 @@ import { PizzaDetailComponent } from './pizza-detail.component.ts';
                             <a class="pull-right close" (click)="destroyPizza(pizza, $event)">&times;</a>
                         </li>
                     </ul>
-                    <div>
+                    <div class="options">
                         <a class="btn btn-default" (click)="newPizza()">+ New Pizza</a>
                     </div>
                 </div>
@@ -36,6 +37,18 @@ import { PizzaDetailComponent } from './pizza-detail.component.ts';
             </div>
         </div>
     `,
+    styles: [`
+        .app {
+            margin: 10% auto;
+            max-width: 900px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        .options {
+            text-align: center;
+        }
+    `],
 })
 export class AppComponent implements OnInit {
     constructor(private pizzaService: PizzaService, private toppingService: ToppingService) { }
@@ -43,6 +56,7 @@ export class AppComponent implements OnInit {
     selectedPizza: Pizza;
     toppings: Array<Topping>;
     pizzas: Array<Pizza>;
+    loading: boolean = true;
 
     onSelect(pizza: Pizza) { this.selectedPizza = pizza; }
 
@@ -59,8 +73,11 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getPizzas();
-        this.getToppings();
+        this.loading = true;
+        Promise.all([
+            this.getPizzas(),
+            this.getToppings(),
+        ]).then(() => this.loading = false);
     }
 
     destroyPizza(pizza: Pizza, event: any) {
