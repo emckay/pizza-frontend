@@ -33,6 +33,7 @@ import { Topping } from '../models/topping.ts';
         </div>
         <div>
             <a class="btn btn-default" (click)="save()">Save</a>
+            <a *ngIf="pizza.pizza_status.order === 0" class="btn btn-primary" (click)="advanceStatus()">Submit Order</a>
         </div>
     </div>
   `,
@@ -60,5 +61,9 @@ export class PizzaDetailComponent {
 
     save() {
         this.pizzaService.save(this.pizza).then((pizza) => this.pizza = pizza);
+    }
+
+    advanceStatus() {
+        this.pizzaService.advanceStatus(this.pizza).then((pizza) => this.pizza = pizza);
     }
 }

@@ -36,11 +36,20 @@ export class PizzaService {
             .catch(this.handleError);
     }
 
+    advanceStatus(pizza: Pizza) {
+        const headers = new Headers({ 'Content-Type': 'application/json' });
+        return this.http.patch(`${this.pizzasUrl}/${pizza.id}/advanceStatus`, undefined, { headers })
+            .toPromise()
+            .then((resp) => resp.json())
+            .catch(this.handleError);
+    }
+
     private post(pizza: Pizza): Promise<Pizza> {
         const headers = new Headers({ 'Content-Type': 'application/json' });
         const toppings = this.getToppingIds(pizza);
+        const pizzaData = this.filterProps(pizza);
         return this.http
-                .post(this.pizzasUrl, JSON.stringify({ pizza, toppings }), { headers })
+                .post(this.pizzasUrl, JSON.stringify({ pizza: pizzaData, toppings }), { headers })
                 .toPromise()
                 .then((resp) => {
                     const id = resp.json().id;
