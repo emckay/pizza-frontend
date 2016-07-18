@@ -25,6 +25,9 @@ import { PizzaDetailComponent } from './pizza-detail.component.ts';
                             {{pizza.name}}
                         </li>
                     </ul>
+                    <div>
+                        <a class="btn btn-default" (click)="newPizza()">+ New Pizza</a>
+                    </div>
                 </div>
                 <div class="col-xs-9">
                     <pizza-detail [pizza]="selectedPizza" [toppings]="toppings"></pizza-detail>
@@ -48,6 +51,10 @@ export class AppComponent implements OnInit {
 
     getToppings() {
         this.toppingService.getToppings().then((toppings) => this.toppings = toppings);
+    }
+
+    newPizza() {
+        this.pizzas.push(new Pizza({ }));
     }
 
     ngOnInit() {
