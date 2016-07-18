@@ -23,6 +23,7 @@ import { PizzaDetailComponent } from './pizza-detail.component.ts';
                             [class.active]="pizza === selectedPizza"
                             (click)="onSelect(pizza)">
                             {{pizza.name}}
+                            <a class="pull-right close" (click)="destroyPizza(pizza, $event)">&times;</a>
                         </li>
                     </ul>
                     <div>
@@ -60,6 +61,18 @@ export class AppComponent implements OnInit {
     ngOnInit() {
         this.getPizzas();
         this.getToppings();
+    }
+
+    destroyPizza(pizza: Pizza, event: any) {
+        event.stopPropagation();
+        this.pizzaService.destroy(pizza)
+            .then(() => {
+                this.pizzas = this.pizzas.filter((p) => p.id !== pizza.id);
+                if (this.selectedPizza && this.selectedPizza.id === pizza.id) {
+                    this.selectedPizza = undefined;
+                }
+            })
+            .catch((error) => console.log('error', error));
     }
 }
 

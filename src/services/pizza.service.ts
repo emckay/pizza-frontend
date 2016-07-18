@@ -31,9 +31,13 @@ export class PizzaService {
     }
 
     destroy(pizza: Pizza) {
-        return this.http.delete(`${this.pizzasUrl}/${pizza.id}`)
-            .toPromise()
-            .catch(this.handleError);
+        if (pizza.id) {
+            return this.http.delete(`${this.pizzasUrl}/${pizza.id}`)
+                .toPromise()
+                .catch(this.handleError);
+        }
+
+        return new Promise((resolve) => resolve());
     }
 
     advanceStatus(pizza: Pizza) {
