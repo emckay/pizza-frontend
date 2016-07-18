@@ -1,10 +1,13 @@
 import { Component, Input } from '@angular/core';
 
+import { PizzaService } from '../services/pizza.service.ts';
+
 import { Pizza } from '../models/pizza.ts';
 import { Topping } from '../models/topping.ts';
 
 @Component({
   selector: 'pizza-detail',
+  providers: [ PizzaService ],
   template: `
     <div *ngIf="pizza">
         <h2>{{pizza.name}} details!</h2>
@@ -32,6 +35,8 @@ import { Topping } from '../models/topping.ts';
   `,
 })
 export class PizzaDetailComponent {
+    constructor(private pizzaService: PizzaService) { }
+
     @Input()
     pizza: Pizza;
 
