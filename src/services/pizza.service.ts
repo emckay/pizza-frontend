@@ -51,11 +51,7 @@ export class PizzaService {
         return this.http
                 .post(this.pizzasUrl, JSON.stringify({ pizza: pizzaData, toppings }), { headers })
                 .toPromise()
-                .then((resp) => {
-                    const id = resp.json().id;
-                    pizza.id = id;
-                    return pizza;
-                })
+                .then((resp) => resp.json())
                 .catch(this.handleError);
     }
 
@@ -67,7 +63,7 @@ export class PizzaService {
         return this.http
                 .put(url, JSON.stringify({ pizza: pizzaData, toppings }), { headers })
                 .toPromise()
-                .then(() => pizza)
+                .then((resp) => resp.json())
                 .catch(this.handleError);
     }
 
