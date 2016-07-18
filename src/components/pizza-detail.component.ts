@@ -31,6 +31,9 @@ import { Topping } from '../models/topping.ts';
                 </label>
             </div>
         </div>
+        <div>
+            <a class="btn btn-default" (click)="save()">Save</a>
+        </div>
     </div>
   `,
 })
@@ -53,5 +56,9 @@ export class PizzaDetailComponent {
         } else {
             this.pizza.toppings.push(topping);
         }
+    }
+
+    save() {
+        this.pizzaService.save(this.pizza).then((pizza) => this.pizza = pizza);
     }
 }

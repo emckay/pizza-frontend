@@ -38,25 +38,44 @@ export class PizzaService {
 
     private post(pizza: Pizza): Promise<Pizza> {
         const headers = new Headers({ 'Content-Type': 'application/json' });
+        const toppings = this.getToppingIds(pizza);
         return this.http
-                .post(this.pizzasUrl, JSON.stringify(pizza), { headers })
+                .post(this.pizzasUrl, JSON.stringify({ pizza, toppings }), { headers })
                 .toPromise()
-                .then((resp) => resp.json())
+                .then((resp) => {
+                    const id = resp.json().id;
+                    pizza.id = id;
+                    return pizza;
+                })
                 .catch(this.handleError);
     }
 
     private put(pizza: Pizza): Promise<Pizza> {
         const headers = new Headers({ 'Content-Type': 'application/json' });
         const url = `${this.pizzasUrl}/${pizza.id}`;
+        const toppings = this.getToppingIds(pizza);
+        const pizzaData = this.filterProps(pizza);
         return this.http
-                .put(url, JSON.stringify(pizza), { headers })
+                .put(url, JSON.stringify({ pizza: pizzaData, toppings }), { headers })
                 .toPromise()
-                .then((resp) => resp.json())
+                .then(() => pizza)
                 .catch(this.handleError);
     }
 
     private handleError(error: any) {
         console.error('An error occurred', error);
         return Promise.reject(error.message || error);
+    }
+
+    private getToppingIds(pizza: Pizza): Array<number> {
+        if (!pizza.toppings) {
+            return [];
+        }
+
+        return pizza.toppings.map((t) => t.id);
+    }
+
+    private filterProps(pizza: Pizza): Object {
+        return { name: pizza.name };
     }
 }
